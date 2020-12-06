@@ -7,8 +7,15 @@ var app = express();
 app.use(morgan("dev"));
 
 app.get('/lookup/:word', function(req, res) {
-  console.log(`got request for ${req.params.word}`);
-  res.sendStatus(200);
+  var {word} = req.params;
+  console.log(`got request for ${word}`);
+  db.find(word, function(err, data) {
+    if (err) {
+      res.sendStatus(404);
+    } else {
+      res.send(JSON.stringify(data));
+    }
+  })
 })
 
 app.listen(PORT, function() {
