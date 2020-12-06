@@ -1,6 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var PORT = 3000;
+var db = require('./db');
 
 var app = express();
 app.use(morgan("dev"));
