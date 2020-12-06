@@ -1,4 +1,6 @@
 var mysql = require('mysql');
+var rclient = require('./redis');
+
 var db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
