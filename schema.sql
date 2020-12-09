@@ -6,8 +6,8 @@ USE redis_test;
 
 CREATE TABLE words (
   id int NOT NULL AUTO_INCREMENT,
-  letter varchar(10) NOT NULL,
   word varchar(50) NOT NULL,
+  definition varchar(100) NOT NULL,
   PRIMARY KEY (ID)
 );
 
@@ -23,9 +23,9 @@ CREATE TABLE words (
  *    mysql -u root < schema.sql
 */
 
-INSERT INTO words (id, letter, word) VALUES (1, "a", "air");
-INSERT INTO words (id, letter, word) VALUES (2, "b", "bat");
-INSERT INTO words (id, letter, word) VALUES (3, "c", "cat");
-INSERT INTO words (id, letter, word) VALUES (4, "d", "drum");
-INSERT INTO words (id, letter, word) VALUES (5, "e", "each");
-INSERT INTO words (id, letter, word) VALUES (6, "f", "fine");
+INSERT INTO words (id, word, definition) VALUES (1, "a", "air");
+INSERT INTO words (id, word, definition) VALUES (2, "b", "bat");
+INSERT INTO words (id, word, definition) VALUES (3, "c", "cat");
+INSERT INTO words (id, word, definition) VALUES (4, "d", "drum");
+INSERT INTO words (id, word, definition) VALUES (5, "e", "each");
+INSERT INTO words (id, word, definition) VALUES (6, "f", "fine");

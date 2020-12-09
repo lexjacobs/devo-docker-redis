@@ -1,5 +1,4 @@
 var mysql = require('mysql');
-var rclient = require('./redis');
 
 var db = mysql.createConnection({
   host: 'localhost',
@@ -11,15 +10,24 @@ db.on('connect', function() {
   console.log('db connected')
 });
 
-db.find = function(letter, cb) {
-  var result = db.query('select * from words where letter = ?', letter, function(err, result) {
-    console.log(err, result)
+db.set = function(word, definition, cb) {
+  var result = db.query('INSERT INTO words (word, definition) VALUES (?, ?)', [word, definition], function(err, result) {
     if (err) {
       cb(err);
     } else {
       cb(null, result);
     }
-  })
-}
+  });
+};
+
+db.get = function(word, cb) {
+  var result = db.query('select * from words where word = ?', word, function(err, result) {
+    if (err) {
+      cb(err);
+    } else {
+      cb(null, result);
+    }
+  });
+};
 
 module.exports = db;
