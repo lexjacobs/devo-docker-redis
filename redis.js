@@ -16,16 +16,14 @@ red.set = function(key, value, cb) {
 }
 red.get = function(key, cb) {
   rclient.get(key, function(err, res) {
-    if(err) {
-      cb(err);
-    } else {
-      cb(null, res);
-    }
+    cb(null, res);
   });
 }
 
 red.flush = function(key, cb) {
-  rclient.del(key, cb)
+  rclient.del(key, function(res) {
+    cb(null, res);
+  })
 }
 
 module.exports = red;

@@ -6,7 +6,7 @@ USE redis_test;
 
 CREATE TABLE words (
   id int NOT NULL AUTO_INCREMENT,
-  word varchar(50) NOT NULL,
+  word varchar(50) UNIQUE NOT NULL,
   definition varchar(100) NOT NULL,
   PRIMARY KEY (ID)
 );

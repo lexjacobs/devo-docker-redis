@@ -11,7 +11,6 @@ app.use(express.json());
 
 app.get('/red/:word', function (req, res) {
   var { word } = req.params;
-  console.log(`got request for ${word}`);
   red.get(word, function (err, data) {
     if (err) {
       res.sendStatus(404);
@@ -24,25 +23,57 @@ app.get('/red/:word', function (req, res) {
 
 app.get('/define/:word', function(req, res) {
   var {word} = req.params;
-  console.log(`got request for ${word}`);
-  db.get(word, function(err, data) {
+  // check redis for word
+  red.get(word, function(err, redResponse) {
     if (err) {
-      res.sendStatus(404);
+      res.sendStatus(500);
+      return;
+    }
+    // if present, return cached value
+    if (redResponse !== null) {
+      res.send(JSON.stringify(redResponse));
+      return;
     } else {
-      res.send(JSON.stringify(data));
+      db.get(word, function(err, data) {
+        if (err) {
+          res.sendStatus(404);
+        } else {
+          if (data.length === 0) {
+            res.send('not defined');
+            return;
+          }
+          // cache in redis
+          red.set(word, data[0].definition, function() {
+            res.send(JSON.stringify(data));
+          })
+        }
+      })
+
     }
   })
+
+
 })
 
 app.post('/define', function(req, res) {
   var {word, definition} = req.body;
-  db.set(word, definition, function(err, data) {
+  // delete redis key
+  red.flush(word, function(err, redResponse) {
     if (err) {
       res.sendStatus(500);
-    } else {
-      res.sendStatus(201);
+      return;
     }
+    db.set(word, definition, function (err, data) {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(201);
+      }
+    })
+
   })
+
+
 })
 
 app.listen(PORT, function() {
