@@ -22,10 +22,3 @@ CREATE TABLE words (
  *  a password, it'll be
  *    mysql -u root < schema.sql
 */
-
-INSERT INTO words (id, word, definition) VALUES (1, "a", "air");
-INSERT INTO words (id, word, definition) VALUES (2, "b", "bat");
-INSERT INTO words (id, word, definition) VALUES (3, "c", "cat");
-INSERT INTO words (id, word, definition) VALUES (4, "d", "drum");
-INSERT INTO words (id, word, definition) VALUES (5, "e", "each");
-INSERT INTO words (id, word, definition) VALUES (6, "f", "fine");

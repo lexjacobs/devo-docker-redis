@@ -13,7 +13,7 @@ db.on('connect', function() {
 db.set = function(word, definition, cb) {
   // INSERT INTO table (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE
   // name = "A", age = 19
-  var result = db.query('INSERT INTO words (word, definition) VALUES (?, ?) on duplicate key update word=?, definition=?', [word, definition, word, definition], function(err, result) {
+  db.query('INSERT INTO words (word, definition) VALUES (?, ?) on duplicate key update word=?, definition=?', [word, definition, word, definition], function(err, result) {
     if (err) {
       cb(err);
     } else {
@@ -23,7 +23,7 @@ db.set = function(word, definition, cb) {
 };
 
 db.get = function(word, cb) {
-  var result = db.query('select * from words where word = ?', word, function(err, result) {
+  db.query('select * from words where word = ?', word, function(err, result) {
     if (err) {
       cb(err);
     } else {

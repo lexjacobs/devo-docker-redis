@@ -1,6 +1,6 @@
 var express = require('express');
 var morgan = require('morgan');
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3030;
 var db = require('./db');
 var red = require('./redis');
 
