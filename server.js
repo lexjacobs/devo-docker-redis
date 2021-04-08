@@ -1,12 +1,11 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 var db = require('./db');
 var red = require('./redis');
 
 var app = express();
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/red/:word', function (req, res) {
@@ -18,7 +17,7 @@ app.get('/red/:word', function (req, res) {
       res.send(data ? data.toString() : 'null');
       // res.send(JSON.stringify(data));
     }
-  })
+  });
 });
 
 app.get('/define/:word', function(req, res) {
@@ -45,15 +44,15 @@ app.get('/define/:word', function(req, res) {
           // cache in redis
           red.set(word, data[0].definition, function() {
             res.send(JSON.stringify(data));
-          })
+          });
         }
-      })
+      });
 
     }
-  })
+  });
 
 
-})
+});
 
 app.post('/define', function(req, res) {
   var {word, definition} = req.body;
@@ -69,13 +68,13 @@ app.post('/define', function(req, res) {
       } else {
         res.sendStatus(201);
       }
-    })
+    });
 
-  })
+  });
 
 
-})
+});
 
 app.listen(PORT, function() {
   console.log(`app listening on port ${PORT}`);
-})
+});
