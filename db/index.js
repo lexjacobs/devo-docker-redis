@@ -7,7 +7,7 @@ var db = mysql.createConnection({
 });
 db.connect();
 db.on('connect', function() {
-  console.log('db connected')
+  console.log('db connected');
 });
 
 db.set = function(word, definition, cb) {

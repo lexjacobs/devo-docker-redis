@@ -30,7 +30,7 @@ app.get('/define/:word', function(req, res) {
     }
     // if present, return cached value
     if (redResponse !== null) {
-      res.send(JSON.stringify(redResponse));
+      res.json({definition: redResponse, word, source: 'reddis'});
       return;
     } else {
       db.get(word, function(err, data) {
@@ -38,12 +38,14 @@ app.get('/define/:word', function(req, res) {
           res.sendStatus(404);
         } else {
           if (data.length === 0) {
-            res.send('not defined');
+            res.json({word, definition: 'not defined', source: 'mysql'});
             return;
           }
           // cache in redis
-          red.set(word, data[0].definition, function() {
-            res.send(JSON.stringify(data));
+          let result = data[0];
+          red.set(word, result.definition, function() {
+            delete result.id;
+            res.json(Object.assign(result, {source: 'mysql'}));
           });
         }
       });
@@ -57,12 +59,12 @@ app.get('/define/:word', function(req, res) {
 app.post('/define', function(req, res) {
   var {word, definition} = req.body;
   // delete redis key
-  red.flush(word, function(err, redResponse) {
+  red.flush(word, function(err) {
     if (err) {
       res.sendStatus(500);
       return;
     }
-    db.set(word, definition, function (err, data) {
+    db.set(word, definition, function (err) {
       if (err) {
         res.sendStatus(500);
       } else {
