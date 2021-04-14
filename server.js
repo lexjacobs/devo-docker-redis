@@ -20,46 +20,44 @@ app.get('/red/:word', function (req, res) {
   });
 });
 
-app.get('/define/:word', function(req, res) {
-  var {word} = req.params;
+app.get('/define/:word', function (req, res) {
+  var { word } = req.params;
   // check redis for word
-  red.get(word, function(err, redResponse) {
+  red.get(word, function (err, redResponse) {
     if (err) {
       res.sendStatus(500);
       return;
     }
     // if present, return cached value
     if (redResponse !== null) {
-      res.json({definition: redResponse, word, source: 'reddis'});
+      res.json({ definition: redResponse, word, source: 'reddis' });
       return;
     } else {
-      db.get(word, function(err, data) {
+      db.get(word, function (err, data) {
         if (err) {
           res.sendStatus(404);
         } else {
           if (data.length === 0) {
-            res.json({word, definition: 'not defined', source: 'mysql'});
+            res.json({ word, definition: 'not defined', source: 'mysql' });
             return;
           }
           // cache in redis
           let result = data[0];
-          red.set(word, result.definition, function() {
+          red.set(word, result.definition, function () {
             delete result.id;
-            res.json(Object.assign(result, {source: 'mysql'}));
+            res.json(Object.assign(result, { source: 'mysql' }));
           });
         }
       });
-
     }
   });
-
-
 });
 
-app.post('/define', function(req, res) {
-  var {word, definition} = req.body;
+app.post('/define', function (req, res) {
+  var { word, definition } = req.body;
+  console.log('wd', word, definition);
   // delete redis key
-  red.flush(word, function(err) {
+  red.flush(word, function (err) {
     if (err) {
       res.sendStatus(500);
       return;
@@ -71,12 +69,9 @@ app.post('/define', function(req, res) {
         res.sendStatus(201);
       }
     });
-
   });
-
-
 });
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log(`app listening on port ${PORT}`);
 });
