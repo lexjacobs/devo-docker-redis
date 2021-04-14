@@ -20,6 +20,21 @@ app.get('/red/:word', function (req, res) {
   });
 });
 
+app.get('/dump/:num?', function (req, res) {
+  var { num = 10 } = req.params;
+  num = parseInt(num, 10);
+  db.wordList(function (err, words) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json({
+        wordCount: words.length,
+        words: words.slice(0, num).map((x) => x.word),
+      });
+    }
+  });
+});
+
 app.get('/define/:word', function (req, res) {
   var { word } = req.params;
   // check redis for word
@@ -55,7 +70,6 @@ app.get('/define/:word', function (req, res) {
 
 app.post('/define', function (req, res) {
   var { word, definition } = req.body;
-  console.log('wd', word, definition);
   // delete redis key
   red.flush(word, function (err) {
     if (err) {

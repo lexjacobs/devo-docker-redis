@@ -14,3 +14,13 @@ npm run seed
 ## start server
 
 npm run start
+
+## check out db
+
+docker exec -it mymysql sh
+
+```
+# mysql -u root -p
+use redis_test
+select * from words limit 10;
+```

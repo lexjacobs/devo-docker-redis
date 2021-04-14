@@ -11,6 +11,16 @@ db.on('connect', function () {
   console.log('db connected');
 });
 
+db.wordList = function (cb) {
+  db.query('select word from words', function (err, result) {
+    if (err) {
+      cb(err);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 db.set = function (word, definition, cb) {
   // INSERT INTO table (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE
   // name = "A", age = 19
