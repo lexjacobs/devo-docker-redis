@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 
 var db = mysql.createConnection({
-  host: 'localhost',
+  host: process.env.DB_HOST || 'mymysql',
   user: 'root',
   password: 'root',
   database: 'redis_test',

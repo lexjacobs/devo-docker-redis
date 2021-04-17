@@ -1,7 +1,7 @@
 var faker = require('faker');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host: 'localhost',
+  host: process.env.DB_HOST || 'mymysql',
   user: 'root',
   password: 'root',
   database: 'redis_test',
